@@ -4,8 +4,14 @@ A responsive personal finance dashboard built with React.js to track income, exp
 ## 🚀 Live Demo
 View Live Application - https://finance-dashboard-nine-tau.vercel.app/
 
-## 📌 Features
+## 📸 Screenshots
+Dashboard screenshot
+![Finance Dashboard](src/assests/dashboard.png)
 
+Transactions screenshot
+![Transactions Page](public/screenshots/transactions.png)
+
+## 📌 Features
 - Add, edit, and delete transactions
 - Track income and expenses
 - Categorize transactions
@@ -19,6 +25,7 @@ View Live Application - https://finance-dashboard-nine-tau.vercel.app/
 - Global state management with Redux Toolkit
 
 ## 🛠️ Tech Stack
+
 - React.js
 - Vite
 - JavaScript (ES6+)
@@ -29,8 +36,9 @@ View Live Application - https://finance-dashboard-nine-tau.vercel.app/
 - React DatePicker
 - CSS3
 - localStorage
-  
+
 ## 📂 Project Structure
+
 src/
 ├── components/
 ├── pages/
@@ -41,11 +49,12 @@ src/
 └── index.css
 
 ## 💾 State Management & Data Storage
+
 - **Redux Toolkit** is used for global transaction state management and UI updates.
 - **localStorage** is used for client-side data persistence.
 - Transactions are loaded from localStorage into Redux when the application starts.
 - Changes to transactions are synchronized between Redux state and localStorage.
-No backend or external database is currently required.
+  No backend or external database is currently required.
 
 ## 📈 Future Improvements
 
