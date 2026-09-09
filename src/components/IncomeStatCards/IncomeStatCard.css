@@ -1,0 +1,15 @@
+.income-stat-card {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.income-stat-card p {
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.income-stat-card h2 {
+  font-size: 24px;
+}

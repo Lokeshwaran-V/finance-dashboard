@@ -1,0 +1,16 @@
+.transactions-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.transactions-header {
+  margin-bottom: 30px;
+}
+
+.transactions-header h1 {
+  margin-bottom: 8px;
+}
+
+.transactions-header p {
+  color: #666;
+}
