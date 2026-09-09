@@ -1,17 +1,21 @@
 # Personal Finance Dashboard
+
 A responsive personal finance dashboard built with React.js to track income, expenses, and monthly financial activity.
 
 ## 🚀 Live Demo
+
 View Live Application - https://finance-dashboard-nine-tau.vercel.app/
 
 ## 📸 Screenshots
+
 Dashboard screenshot
-![Finance Dashboard](src/assests/dashboard.png)
+![Finance Dashboard](src/assets/dashboard.png)
 
 Transactions screenshot
-![Transactions Page](public/screenshots/transactions.png)
+![Transactions Page](src/assets/transaction.png)
 
 ## 📌 Features
+
 - Add, edit, and delete transactions
 - Track income and expenses
 - Categorize transactions
