@@ -1,16 +1,57 @@
-# React + Vite
+# Personal Finance Dashboard
+A responsive personal finance dashboard built with React.js to track income, expenses, and monthly financial activity.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Live Demo
+View Live Application - https://finance-dashboard-nine-tau.vercel.app/
 
-Currently, two official plugins are available:
+## 📌 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Add, edit, and delete transactions
+- Track income and expenses
+- Categorize transactions
+- Monthly transaction filtering
+- Income summary by category
+- Expense breakdown using a pie chart
+- Recent transactions dashboard
+- Persistent data using localStorage
+- Responsive design for desktop and mobile
+- Client-side routing with React Router
+- Global state management with Redux Toolkit
 
-## React Compiler
+## 🛠️ Tech Stack
+- React.js
+- Vite
+- JavaScript (ES6+)
+- Redux Toolkit
+- React Redux
+- React Router
+- Recharts
+- React DatePicker
+- CSS3
+- localStorage
+  
+## 📂 Project Structure
+src/
+├── components/
+├── pages/
+├── services/
+├── store/
+├── App.jsx
+├── main.jsx
+└── index.css
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 💾 State Management & Data Storage
+- **Redux Toolkit** is used for global transaction state management and UI updates.
+- **localStorage** is used for client-side data persistence.
+- Transactions are loaded from localStorage into Redux when the application starts.
+- Changes to transactions are synchronized between Redux state and localStorage.
+No backend or external database is currently required.
 
-## Expanding the ESLint configuration
+## 📈 Future Improvements
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Backend integration
+- User authentication
+- Cloud database storage
+- Advanced financial analytics
+- Budget management
+- Export transactions
