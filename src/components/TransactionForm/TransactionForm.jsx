@@ -55,7 +55,14 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
       ...(editingTransaction || {}),
       ...formData,
       amount: Number(formData.amount),
-      date: formData.date ? formData.date.toISOString().split("T")[0] : null,
+      date: formData.date
+        ? `${formData.date.getFullYear()}-${String(
+            formData.date.getMonth() + 1,
+          ).padStart(2, "0")}-${String(formData.date.getDate()).padStart(
+            2,
+            "0",
+          )}`
+        : null,
     };
 
     if (editingTransaction) {
