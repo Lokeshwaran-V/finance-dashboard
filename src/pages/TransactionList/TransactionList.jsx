@@ -39,7 +39,7 @@ function TransactionList({
         ) : (
           transactions.map((transaction) => (
             <div className="transaction-item" key={transaction.id}>
-              <div>
+              <div className="transaction-item-description">
                 <h3>{transaction.description || transaction.category}</h3>
 
                 <p>
@@ -52,12 +52,12 @@ function TransactionList({
                   {transaction.type === "income" ? "+" : "-"}₹
                   {transaction.amount.toLocaleString("en-IN")}
                 </span>
-
-                <button onClick={() => onEdit(transaction)}>Edit</button>
-
-                <button onClick={() => handleDelete(transaction.id)}>
-                  Delete
-                </button>
+                <div className="transaction-actions-buttons">
+                  <button onClick={() => onEdit(transaction)}>Edit</button>
+                  <button onClick={() => handleDelete(transaction.id)}>
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))
