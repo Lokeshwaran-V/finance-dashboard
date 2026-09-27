@@ -15,6 +15,10 @@ function Layout() {
           <NavLink to="/transactions" className="nav-link">
             Transactions
           </NavLink>
+
+          <NavLink to="/planning" className="nav-link">
+            Plannings
+          </NavLink>
         </nav>
       </aside>
 
