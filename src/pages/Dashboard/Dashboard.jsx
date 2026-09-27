@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ExpenseChart from "../../components/ExpenseChart/ExpenseChart";
 import TransactionList from "../TransactionList/TransactionList";
+import GoalSummary from "../../components/GoalSummary/GoalSummary";
 
 function Dashboard() {
   const transactions = useSelector((state) => state.transactions.transactions);
@@ -113,6 +114,7 @@ function Dashboard() {
         showViewAll
         emptyMessage="No transactions found for this month."
       />
+      <GoalSummary />
     </div>
   );
 }

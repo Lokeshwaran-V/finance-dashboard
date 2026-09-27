@@ -1,0 +1,59 @@
+.goals-list {
+  margin-top: 30px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.goals-list h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.goal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.goal-item:last-child {
+  border-bottom: none;
+}
+
+.goal-item h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.goal-item p {
+  font-size: 14px;
+  color: #777;
+}
+
+.goal-item strong {
+  font-size: 16px;
+}
+
+.goal-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.goal-actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.goal-actions button:first-of-type {
+  color: #4f46e5;
+}
+
+.goal-actions button:last-of-type {
+  color: #d32f2f;
+}

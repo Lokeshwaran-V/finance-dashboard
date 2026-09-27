@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addGoal as addGoalToRedux } from "../../store/goalSlice";
-import { addGoal } from "../services/goalServices.js";
+import {
+  addGoal as addGoalToRedux,
+  updateGoal as updateGoalToRedux,
+} from "../../store/goalSlice";
+import { addGoal, updateGoal } from "../services/goalServices.js";
 import "./Planning.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import PlanningList from "../PLanningList/PlanningList.jsx";
+import PlanningList from "../PlanningList/PlanningList.jsx";
 
 function Planning() {
   const dispatch = useDispatch();
+  const [editingGoal, setEditingGoal] = useState(null);
   const [goalData, setGoalData] = useState({
     goal: "",
     amount: "",
@@ -24,25 +28,55 @@ function Planning() {
     }));
   };
 
+  const handleEdit = (goal) => {
+    setEditingGoal(goal);
+
+    const [year, month, day] = goal.date.split("-").map(Number);
+
+    setGoalData({
+      goal: goal.goal,
+      amount: goal.amount,
+      date: new Date(year, month - 1, day),
+    });
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const newGoal = {
-      id: crypto.randomUUID(),
-      goal: goalData.goal,
-      amount: Number(goalData.amount),
-      date: goalData.date
-        ? `${goalData.date.getFullYear()}-${String(
-            goalData.date.getMonth() + 1,
-          ).padStart(2, "0")}-${String(goalData.date.getDate()).padStart(
-            2,
-            "0",
-          )}`
-        : null,
-    };
-    addGoal(newGoal);
-    dispatch(addGoalToRedux(newGoal));
-    console.log("New Goal Added:", newGoal);
+    const formattedDate = goalData.date
+      ? `${goalData.date.getFullYear()}-${String(
+          goalData.date.getMonth() + 1,
+        ).padStart(2, "0")}-${String(goalData.date.getDate()).padStart(2, "0")}`
+      : null;
+
+    if (editingGoal) {
+      const updatedGoal = {
+        ...editingGoal,
+        goal: goalData.goal,
+        amount: Number(goalData.amount),
+        date: formattedDate,
+      };
+
+      updateGoal(updatedGoal);
+      dispatch(updateGoalToRedux(updatedGoal));
+
+      setEditingGoal(null);
+    } else {
+      const newGoal = {
+        id: crypto.randomUUID(),
+        goal: goalData.goal,
+        amount: Number(goalData.amount),
+        date: formattedDate,
+      };
+
+      addGoal(newGoal);
+      dispatch(addGoalToRedux(newGoal));
+    }
+
+    setGoalData({
+      goal: "",
+      amount: "",
+      date: null,
+    });
   };
 
   return (
@@ -99,7 +133,7 @@ function Planning() {
 
         <button type="submit">Add Goal</button>
       </form>
-      <PlanningList />
+      <PlanningList onEdit={handleEdit} />
     </div>
   );
 }
