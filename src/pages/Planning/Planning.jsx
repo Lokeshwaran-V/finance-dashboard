@@ -1,23 +1,46 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import {
   addGoal as addGoalToRedux,
   updateGoal as updateGoalToRedux,
 } from "../../store/goalSlice";
+
 import { addGoal, updateGoal } from "../services/goalServices.js";
-import "./Planning.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
 import PlanningList from "../PlanningList/PlanningList.jsx";
+import "./Planning.css";
+
+const INITIAL_GOAL_DATA = {
+  goal: "",
+  amount: "",
+  date: null,
+};
+
+const formatDate = (date) => {
+  if (!date) return null;
+
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}-${String(date.getDate()).padStart(2, "0")}`;
+};
+
+const parseDate = (dateString) => {
+  if (!dateString) return null;
+
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  return new Date(year, month - 1, day);
+};
 
 function Planning() {
   const dispatch = useDispatch();
+
   const [editingGoal, setEditingGoal] = useState(null);
-  const [goalData, setGoalData] = useState({
-    goal: "",
-    amount: "",
-    date: null,
-  });
+  const [goalData, setGoalData] = useState(INITIAL_GOAL_DATA);
 
   const handleGoalChange = (event) => {
     const { name, value } = event.target;
@@ -28,55 +51,52 @@ function Planning() {
     }));
   };
 
+  const handleDateChange = (date) => {
+    setGoalData((previousData) => ({
+      ...previousData,
+      date,
+    }));
+  };
+
   const handleEdit = (goal) => {
     setEditingGoal(goal);
-
-    const [year, month, day] = goal.date.split("-").map(Number);
 
     setGoalData({
       goal: goal.goal,
       amount: goal.amount,
-      date: new Date(year, month - 1, day),
+      date: parseDate(goal.date),
     });
   };
+
+  const resetForm = () => {
+    setGoalData(INITIAL_GOAL_DATA);
+    setEditingGoal(null);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const formattedDate = goalData.date
-      ? `${goalData.date.getFullYear()}-${String(
-          goalData.date.getMonth() + 1,
-        ).padStart(2, "0")}-${String(goalData.date.getDate()).padStart(2, "0")}`
-      : null;
+    const goal = {
+      ...(editingGoal || {}),
+      goal: goalData.goal,
+      amount: Number(goalData.amount),
+      date: formatDate(goalData.date),
+    };
 
     if (editingGoal) {
-      const updatedGoal = {
-        ...editingGoal,
-        goal: goalData.goal,
-        amount: Number(goalData.amount),
-        date: formattedDate,
-      };
-
-      updateGoal(updatedGoal);
-      dispatch(updateGoalToRedux(updatedGoal));
-
-      setEditingGoal(null);
+      updateGoal(goal);
+      dispatch(updateGoalToRedux(goal));
     } else {
       const newGoal = {
         id: crypto.randomUUID(),
-        goal: goalData.goal,
-        amount: Number(goalData.amount),
-        date: formattedDate,
+        ...goal,
       };
 
       addGoal(newGoal);
       dispatch(addGoalToRedux(newGoal));
     }
 
-    setGoalData({
-      goal: "",
-      amount: "",
-      date: null,
-    });
+    resetForm();
   };
 
   return (
@@ -117,12 +137,7 @@ function Planning() {
             <DatePicker
               id="date"
               selected={goalData.date}
-              onChange={(date) =>
-                setGoalData((previousData) => ({
-                  ...previousData,
-                  date,
-                }))
-              }
+              onChange={handleDateChange}
               dateFormat="dd/MM/yyyy"
               placeholderText="Select target date"
               onChangeRaw={(event) => event.preventDefault()}
@@ -131,8 +146,11 @@ function Planning() {
           </div>
         </div>
 
-        <button type="submit">Add Goal</button>
+        <button type="submit">
+          {editingGoal ? "Update Goal" : "Add Goal"}
+        </button>
       </form>
+
       <PlanningList onEdit={handleEdit} />
     </div>
   );

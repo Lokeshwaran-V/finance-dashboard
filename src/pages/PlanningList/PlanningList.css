@@ -1,22 +1,23 @@
 .goals-list {
   margin-top: 30px;
-  background: #ffffff;
+  padding: 24px;
+  background: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 12px;
-  padding: 24px;
 }
 
 .goals-list h2 {
+  margin: 0 0 20px;
   font-size: 20px;
-  margin-bottom: 20px;
 }
 
 .goal-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   padding: 16px 0;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #eee;
 }
 
 .goal-item:last-child {
@@ -24,30 +25,34 @@
 }
 
 .goal-item h3 {
+  margin: 0 0 6px;
   font-size: 16px;
-  margin-bottom: 6px;
 }
 
 .goal-item p {
+  margin: 0;
   font-size: 14px;
   color: #777;
 }
 
 .goal-item strong {
   font-size: 16px;
+  white-space: nowrap;
 }
 
 .goal-actions {
   display: flex;
   align-items: center;
   gap: 16px;
+  white-space: nowrap;
 }
 
 .goal-actions button {
+  padding: 0;
   border: none;
   background: none;
-  cursor: pointer;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .goal-actions button:first-of-type {
@@ -56,4 +61,21 @@
 
 .goal-actions button:last-of-type {
   color: #d32f2f;
+}
+
+@media (max-width: 600px) {
+  .goals-list {
+    padding: 20px;
+  }
+
+  .goal-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .goal-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }

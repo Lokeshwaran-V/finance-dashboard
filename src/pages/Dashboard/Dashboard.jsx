@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import StatCard from "../StatCard/StatCard";
-import IncomeStatCard from "../../components/IncomeStatCards/IncomeStatCard";
-import "./Dashboard.css";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+import StatCard from "../StatCard/StatCard";
+import IncomeStatCard from "../../components/IncomeStatCards/IncomeStatCard";
 import ExpenseChart from "../../components/ExpenseChart/ExpenseChart";
 import TransactionList from "../TransactionList/TransactionList";
 import GoalSummary from "../../components/GoalSummary/GoalSummary";
 
+import "./Dashboard.css";
+
 function Dashboard() {
-  const transactions = useSelector((state) => state.transactions.transactions);
+  const transactions = useSelector(
+    (state) => state.transactions.transactions,
+  );
 
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
@@ -21,11 +24,9 @@ function Dashboard() {
   const monthlyTransactions = transactions.filter((transaction) => {
     if (!transaction.date) return false;
 
-    const [year, month] = transaction.date.split("-");
+    const [year, month] = transaction.date.split("-").map(Number);
 
-    return (
-      Number(year) === selectedYear && Number(month) === selectedMonthNumber
-    );
+    return year === selectedYear && month === selectedMonthNumber;
   });
 
   const incomeTransactions = monthlyTransactions.filter(
@@ -46,25 +47,30 @@ function Dashboard() {
     0,
   );
 
-  // Calculate balance using ALL transactions
-  const allIncome = transactions
-    .filter((transaction) => transaction.type === "income")
-    .reduce((total, transaction) => total + transaction.amount, 0);
+  const allIncome = transactions.reduce(
+    (total, transaction) =>
+      transaction.type === "income"
+        ? total + transaction.amount
+        : total,
+    0,
+  );
 
-  const allExpenses = transactions
-    .filter((transaction) => transaction.type === "expense")
-    .reduce((total, transaction) => total + transaction.amount, 0);
+  const allExpenses = transactions.reduce(
+    (total, transaction) =>
+      transaction.type === "expense"
+        ? total + transaction.amount
+        : total,
+    0,
+  );
 
   const totalBalance = allIncome - allExpenses;
-
-  // Savings for the selected month
   const savings = totalIncome - totalExpenses;
 
   const incomeByCategory = incomeTransactions.reduce(
     (accumulator, transaction) => {
-      const category = transaction.category;
+      const { category, amount } = transaction;
 
-      accumulator[category] = (accumulator[category] || 0) + transaction.amount;
+      accumulator[category] = (accumulator[category] || 0) + amount;
 
       return accumulator;
     },
@@ -79,15 +85,15 @@ function Dashboard() {
           <p>Here's your financial overview.</p>
         </div>
 
-        <span>
+        <div className="month-picker">
           <DatePicker
             selected={selectedMonth}
-            onChange={(date) => setSelectedMonth(date)}
+            onChange={setSelectedMonth}
             dateFormat="MMMM yyyy"
             showMonthYearPicker
             onChangeRaw={(event) => event.preventDefault()}
           />
-        </span>
+        </div>
       </div>
 
       <div className="summary-cards">
@@ -114,17 +120,24 @@ function Dashboard() {
 
       <div className="income-stat-cards">
         {Object.entries(incomeByCategory).map(([category, amount]) => (
-          <IncomeStatCard key={category} category={category} amount={amount} />
+          <IncomeStatCard
+            key={category}
+            category={category}
+            amount={amount}
+          />
         ))}
       </div>
+
       {expenseTransactions.length > 0 && (
         <ExpenseChart expenses={expenseTransactions} />
       )}
+
       <TransactionList
         transactions={monthlyTransactions.slice(0, 5)}
         showViewAll
         emptyMessage="No transactions found for this month."
       />
+
       <GoalSummary />
     </div>
   );

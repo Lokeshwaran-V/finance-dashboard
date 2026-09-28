@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteGoal as deleteGoalFromRedux,
@@ -7,9 +6,7 @@ import { deleteGoal } from "../services/goalServices.js";
 import "./PlanningList.css";
 
 function PlanningList({ onEdit }) {
-  
   const dispatch = useDispatch();
-
   const goals = useSelector((state) => state.goals.goals);
 
   const handleDelete = (id) => {
@@ -36,11 +33,14 @@ function PlanningList({ onEdit }) {
                 ₹{goal.amount.toLocaleString("en-IN")}
               </strong>
 
-              <button onClick={() => onEdit(goal)}>
+              <button type="button" onClick={() => onEdit(goal)}>
                 Edit
               </button>
 
-              <button onClick={() => handleDelete(goal.id)}>
+              <button
+                type="button"
+                onClick={() => handleDelete(goal.id)}
+              >
                 Delete
               </button>
             </div>
