@@ -123,7 +123,6 @@ function Planning() {
                   date,
                 }))
               }
-              
               dateFormat="dd/MM/yyyy"
               placeholderText="Select target date"
               onChangeRaw={(event) => event.preventDefault()}
