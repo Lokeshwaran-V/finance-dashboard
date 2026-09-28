@@ -39,6 +39,8 @@
   background: #222;
   color: #fff;
   cursor: pointer;
+  margin-top: 15px;
+  transition: opacity 0.2s ease;
 }
 
 .transaction-form button:hover {

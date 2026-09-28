@@ -1,18 +1,20 @@
 .transaction-list {
   margin-top: 30px;
-  background: #ffffff;
+  padding: 24px;
+  background: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 12px;
-  padding: 24px;
 }
 
 .transaction-list-header {
-  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .transaction-list-header h2 {
+  margin: 0;
   font-size: 20px;
 }
 
@@ -25,24 +27,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   padding: 16px 0;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #eee;
 }
 
 .transaction-item:last-child {
   border-bottom: none;
 }
-.transaction-item-description{
-  width: 65%;
 
+.transaction-item-description {
+  width: 65%;
+  min-width: 0;
 }
 
 .transaction-item h3 {
+  margin: 0 0 5px;
   font-size: 16px;
-  margin-bottom: 5px;
 }
 
 .transaction-item p {
+  margin: 0;
   font-size: 14px;
   color: #777;
 }
@@ -64,17 +69,32 @@
   align-items: center;
   gap: 20px;
 }
+
 .transaction-actions-buttons {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
-.transaction-actions button {
+.transaction-actions-buttons button {
+  padding: 0;
   border: none;
   background: none;
-  color: #d32f2f;
+  font-size: 14px;
   cursor: pointer;
+}
+
+.edit-button {
+  color: #4f46e5;
+}
+
+.delete-button {
+  color: #d32f2f;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  text-decoration: underline;
 }
 
 .view-all-button {
@@ -99,9 +119,22 @@
 }
 
 @media (max-width: 700px) {
-  .transaction-actions {
-    display: flex;
-    flex-direction: column;
+  .transaction-item {
+    align-items: flex-start;
   }
-  
+
+  .transaction-item-description {
+    width: auto;
+    flex: 1;
+  }
+
+  .transaction-actions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .transaction-actions-buttons {
+    gap: 12px;
+  }
 }

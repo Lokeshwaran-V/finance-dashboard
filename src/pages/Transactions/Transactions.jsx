@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
+
 import TransactionForm from "../../components/TransactionForm/TransactionForm";
 import TransactionList from "../TransactionList/TransactionList";
+
 import "./Transactions.css";
-import { useState } from "react";
 
 function Transactions() {
   const [editingTransaction, setEditingTransaction] = useState(null);
@@ -11,9 +13,9 @@ function Transactions() {
 
   const transactions = useSelector((state) => state.transactions.transactions);
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    const searchValue = searchTerm.toLowerCase().trim();
+  const searchValue = searchTerm.toLowerCase().trim();
 
+  const filteredTransactions = transactions.filter((transaction) => {
     const matchesSearch =
       !searchValue ||
       transaction.description?.toLowerCase().includes(searchValue) ||
@@ -25,6 +27,11 @@ function Transactions() {
 
     return matchesSearch && matchesType;
   });
+
+  const emptyMessage =
+    searchValue || transactionType !== "all"
+      ? "No transactions match your filters."
+      : "No transactions found.";
 
   return (
     <div className="transactions-page">
@@ -63,11 +70,7 @@ function Transactions() {
       <TransactionList
         transactions={filteredTransactions}
         onEdit={setEditingTransaction}
-        emptyMessage={
-          searchTerm
-            ? "No transactions match your search."
-            : "No transactions found."
-        }
+        emptyMessage={emptyMessage}
       />
     </div>
   );

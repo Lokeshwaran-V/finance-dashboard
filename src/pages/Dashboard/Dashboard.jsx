@@ -12,9 +12,7 @@ import GoalSummary from "../../components/GoalSummary/GoalSummary";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const transactions = useSelector(
-    (state) => state.transactions.transactions,
-  );
+  const transactions = useSelector((state) => state.transactions.transactions);
 
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
@@ -49,17 +47,13 @@ function Dashboard() {
 
   const allIncome = transactions.reduce(
     (total, transaction) =>
-      transaction.type === "income"
-        ? total + transaction.amount
-        : total,
+      transaction.type === "income" ? total + transaction.amount : total,
     0,
   );
 
   const allExpenses = transactions.reduce(
     (total, transaction) =>
-      transaction.type === "expense"
-        ? total + transaction.amount
-        : total,
+      transaction.type === "expense" ? total + transaction.amount : total,
     0,
   );
 
@@ -120,25 +114,22 @@ function Dashboard() {
 
       <div className="income-stat-cards">
         {Object.entries(incomeByCategory).map(([category, amount]) => (
-          <IncomeStatCard
-            key={category}
-            category={category}
-            amount={amount}
-          />
+          <IncomeStatCard key={category} category={category} amount={amount} />
         ))}
       </div>
+      <div className="graph-goal">
+        {expenseTransactions.length > 0 && (
+          <ExpenseChart expenses={expenseTransactions} />
+        )}
 
-      {expenseTransactions.length > 0 && (
-        <ExpenseChart expenses={expenseTransactions} />
-      )}
+        <GoalSummary />
+      </div>
 
       <TransactionList
         transactions={monthlyTransactions.slice(0, 5)}
         showViewAll
         emptyMessage="No transactions found for this month."
       />
-
-      <GoalSummary />
     </div>
   );
 }

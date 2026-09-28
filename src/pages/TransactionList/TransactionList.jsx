@@ -1,8 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+
 import { deleteTransaction as deleteTransactionFromRedux } from "../../store/transactionSlice";
 import { deleteTransaction } from "../services/transactionService";
+
 import "./TransactionList.css";
-import { Link } from "react-router-dom";
 
 function TransactionList({
   transactions = [],
@@ -12,13 +14,14 @@ function TransactionList({
 }) {
   const dispatch = useDispatch();
 
-  // const transactions = useSelector((state) => state.transactions.transactions);
-
   const handleDelete = (id) => {
-    // Remove from localStorage
-    deleteTransaction(id);
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this transaction?",
+    );
 
-    // Remove from Redux
+    if (!confirmed) return;
+
+    deleteTransaction(id);
     dispatch(deleteTransactionFromRedux(id));
   };
 
@@ -26,6 +29,7 @@ function TransactionList({
     <div className="transaction-list">
       <div className="transaction-list-header">
         <h2>Recent Transactions</h2>
+
         {showViewAll && (
           <Link className="view-all-button" to="/transactions">
             View All
@@ -52,9 +56,19 @@ function TransactionList({
                   {transaction.type === "income" ? "+" : "-"}₹
                   {transaction.amount.toLocaleString("en-IN")}
                 </span>
+
                 <div className="transaction-actions-buttons">
-                  <button onClick={() => onEdit(transaction)}>Edit</button>
-                  <button onClick={() => handleDelete(transaction.id)}>
+                  {onEdit && (
+                    <button type="button" onClick={() => onEdit(transaction)} className="edit-button">
+                      Edit
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(transaction.id)}
+                    className="delete-button"
+                  >
                     Delete
                   </button>
                 </div>
