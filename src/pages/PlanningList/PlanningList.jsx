@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteGoal as deleteGoalFromRedux,
-} from "../../store/goalSlice";
+import { deleteGoal as deleteGoalFromRedux } from "../../store/goalSlice";
 import { deleteGoal } from "../services/goalServices.js";
 import "./PlanningList.css";
 
@@ -10,8 +8,14 @@ function PlanningList({ onEdit }) {
   const goals = useSelector((state) => state.goals.goals);
 
   const handleDelete = (id) => {
-    deleteGoal(id);
-    dispatch(deleteGoalFromRedux(id));
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this transaction?",
+    );
+
+    if (!confirmed) return;
+
+    deleteTransaction(id);
+    dispatch(deleteTransactionFromRedux(id));
   };
 
   return (
@@ -29,18 +33,13 @@ function PlanningList({ onEdit }) {
             </div>
 
             <div className="goal-actions">
-              <strong>
-                ₹{goal.amount.toLocaleString("en-IN")}
-              </strong>
+              <strong>₹{goal.amount.toLocaleString("en-IN")}</strong>
 
               <button type="button" onClick={() => onEdit(goal)}>
                 Edit
               </button>
 
-              <button
-                type="button"
-                onClick={() => handleDelete(goal.id)}
-              >
+              <button type="button" onClick={() => handleDelete(goal.id)}>
                 Delete
               </button>
             </div>
