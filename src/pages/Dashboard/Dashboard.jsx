@@ -46,7 +46,18 @@ function Dashboard() {
     0,
   );
 
-  const totalBalance = totalIncome - totalExpenses;
+  // Calculate balance using ALL transactions
+  const allIncome = transactions
+    .filter((transaction) => transaction.type === "income")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const allExpenses = transactions
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const totalBalance = allIncome - allExpenses;
+
+  // Savings for the selected month
   const savings = totalIncome - totalExpenses;
 
   const incomeByCategory = incomeTransactions.reduce(
