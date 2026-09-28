@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   addTransaction as addTransactionToRedux,
@@ -12,32 +12,49 @@ import "./TransactionForm.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+const INITIAL_FORM_DATA = {
+  type: "expense",
+  amount: "",
+  category: "",
+  description: "",
+  date: null,
+};
+
+const formatDate = (date) => {
+  if (!date) return null;
+
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}-${String(date.getDate()).padStart(2, "0")}`;
+};
+
+const parseDate = (dateString) => {
+  if (!dateString) return null;
+
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  return new Date(year, month - 1, day);
+};
+
 function TransactionForm({ editingTransaction, setEditingTransaction }) {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (editingTransaction) {
-      setFormData({
-        type: editingTransaction.type,
-        amount: editingTransaction.amount,
-        category: editingTransaction.category,
-        description: editingTransaction.description,
-        date: editingTransaction.date
-          ? new Date(editingTransaction.date)
-          : null,
-      });
-    }
-  }, [editingTransaction]);
-
-  const [formData, setFormData] = useState({
-    type: "expense",
-    amount: "",
-    category: "",
-    description: "",
-    date: null,
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 
   const isIncome = formData.type === "income";
+
+  useEffect(() => {
+    if (!editingTransaction) return;
+
+    setFormData({
+      type: editingTransaction.type,
+      amount: editingTransaction.amount,
+      category: editingTransaction.category,
+      description: editingTransaction.description,
+      date: parseDate(editingTransaction.date),
+    });
+  }, [editingTransaction]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -48,6 +65,18 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
     }));
   };
 
+  const handleDateChange = (date) => {
+    setFormData((previousData) => ({
+      ...previousData,
+      date,
+    }));
+  };
+
+  const resetForm = () => {
+    setFormData(INITIAL_FORM_DATA);
+    setEditingTransaction(null);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -55,50 +84,28 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
       ...(editingTransaction || {}),
       ...formData,
       amount: Number(formData.amount),
-      date: formData.date
-        ? `${formData.date.getFullYear()}-${String(
-            formData.date.getMonth() + 1,
-          ).padStart(2, "0")}-${String(formData.date.getDate()).padStart(
-            2,
-            "0",
-          )}`
-        : null,
+      date: formatDate(formData.date),
     };
 
     if (editingTransaction) {
-      // Update localStorage
       updateTransaction(transaction);
-
-      // Update Redux
       dispatch(updateTransactionInRedux(transaction));
     } else {
-      // Create new transaction
       const newTransaction = {
         id: crypto.randomUUID(),
         ...transaction,
       };
 
       addTransaction(newTransaction);
-
       dispatch(addTransactionToRedux(newTransaction));
     }
 
-    // Reset form
-    setFormData({
-      type: "expense",
-      amount: "",
-      category: "",
-      description: "",
-      date: null,
-    });
-
-    setEditingTransaction(null);
+    resetForm();
   };
 
   return (
     <form className="transaction-form" onSubmit={handleSubmit}>
       <div className="transaction-form--inputs">
-        {/* Type */}
         <div className="form-group">
           <label htmlFor="type">Type</label>
 
@@ -113,7 +120,6 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
           </select>
         </div>
 
-        {/* Amount */}
         <div className="form-group">
           <label htmlFor="amount">Amount</label>
 
@@ -128,7 +134,6 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
           />
         </div>
 
-        {/* Category */}
         <div className="form-group">
           <label htmlFor="category">Category</label>
 
@@ -158,20 +163,13 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
           </select>
         </div>
 
-        {/* Date - Expense only */}
-
         <div className="form-group">
           <label htmlFor="date">Date</label>
 
           <DatePicker
             id="date"
             selected={formData.date}
-            onChange={(date) =>
-              setFormData((previousData) => ({
-                ...previousData,
-                date,
-              }))
-            }
+            onChange={handleDateChange}
             dateFormat="dd/MM/yyyy"
             placeholderText="Select date"
             maxDate={new Date()}
@@ -180,7 +178,6 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
           />
         </div>
 
-        {/* Description */}
         {(!isIncome || formData.category === "other") && (
           <div className="form-group">
             <label htmlFor="description">Description</label>
@@ -199,7 +196,11 @@ function TransactionForm({ editingTransaction, setEditingTransaction }) {
       </div>
 
       <button type="submit">
-        {isIncome ? "Add Income" : "Add Transaction"}
+        {editingTransaction
+          ? "Update Transaction"
+          : isIncome
+            ? "Add Income"
+            : "Add Transaction"}
       </button>
     </form>
   );
